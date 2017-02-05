@@ -1,15 +1,53 @@
 {% extends "base.html" %}
-
 {% block body %}
-<!-- <div style="color:red; font-size:2em;">hello world, {{ name }}</div>
-<div style="color:#123456;">hello world, joe</div>
-<div style="color:red;">hello world, scott</div> -->
-  {% if user.is_authenticated %}
-  <div>{{ user.username }}님, 안녕하세요!</div>
-    <a href="./logout">로그아웃</a>
-  {% else %}
-  <div>로그인 해주세요.</div>
-    <a href="./login">로그인</a>
-    <a href="./signup">회원가입</a>
-  {% endif %}
+{% include "navbar.html" %}
+<div class="container">
+  <div class="col-sm-6 col-sm-offset-3">
+    {% if user.is_authenticated %}
+      {% if user.partner %}
+        <h3 class="table_title">환영합니다!</h3>
+        <table class="table">
+          <tr>
+            <th>상호명</th>
+            <td>{{user.partner.name}}</td>
+          </tr>
+          <tr>
+            <th>전화번호</th>
+            <td>{{user.partner.contact}}</td>
+          </tr>
+          <tr>
+            <th>주소</th>
+            <td>{{user.partner.address}}</td>
+          </tr>
+          <tr>
+            <th>소개</th>
+            <td>{{user.partner.description}}</td>
+          </tr>
+        </table>
+        <a href="./edit">
+          <button class="btn btn-default">수정</button>
+        </a>
+      {% else %}
+        <!-- <div>
+          <h3 class="table_title">추가 정보를 입력하세요.</h3>
+        </div> -->
+        <form method="post" action="">
+          <div class="form-group">
+            {% csrf_token %}
+            <!-- <div><input name="name" type="text"></div>
+            <div><input name="contact" type="text"></div>
+            <div><input name="address" type="text"></div>
+            <div><input name="description" type="TextField"></div> -->
+            {{partner_form.as_p}}
+            <button type="submit" class="btn btn-default">저장하기</button>
+          </div>
+        </form>
+      {% endif %}
+    {% else %}
+      <div>로그인 해주세요.</div>
+      <a href="./login">로그인</a>
+      <a href="./signup">회원가입</a>
+    {% endif %}
+  </div>
+</div>
 {% endblock %}

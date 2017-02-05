@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block body %}
+<div class="site-wrapper">
+  <div class="site-wrapper-inner">
+    <div class="cover-container">
+    {% include "navbar.html" %}
+    <div class="container">
+      <div class="col-sm-6 col-sm-offset-3">
+        <form method="post" action="">
+          <div class="form-group">
+            {% csrf_token %}
+            <!-- <div><input name="name" type="text"></div>
+            <div><input name="contact" type="text"></div>
+            <div><input name="address" type="text"></div>
+            <div><input name="description" type="TextField"></div> -->
+            {{partner_form.as_p}}
+            <button type="submit" class="btn btn-default">저장하기</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    {% endblock %}
+    </div>
+  </div>
+</div>

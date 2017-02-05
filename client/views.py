@@ -1,9 +1,9 @@
 from django.shortcuts import render
-
+from partner.models import Partner
 # Create your views here.
 def index(request):
-    # article_list = Article.objects.all()
-    # ctx = {
-    #     "article_list" : article_list
-    # }
-    return render(request, 'index.html', {})
+    partner_list = Partner.objects.all()
+    ctx = {
+        "partner_list":partner_list
+    }
+    return render(request, 'main.html', ctx)

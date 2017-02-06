@@ -14,7 +14,19 @@
             <div><input name="contact" type="text"></div>
             <div><input name="address" type="text"></div>
             <div><input name="description" type="TextField"></div> -->
-            {{partner_form.as_p}}
+            <!-- {{partner_form.as_p}} -->
+            <div>
+              <input class="form-control" type="text" name="name"
+               value="{{partner.name}}"></div>
+            <div>
+              <input class="form-control" type="text" name="contact"
+               value="{{partner.contact}}"></div>
+            <div>
+              <input class="form-control" type="text" name="address" 
+               value="{{partner.address}}"></div>
+            <div>
+              <textarea name="description" cols="30" rows="10" style="width:100%"
+               class="form-control">{{partner.description}}</textarea></div>
             <button type="submit" class="btn btn-default">저장하기</button>
           </div>
         </form>

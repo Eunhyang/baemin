@@ -3,6 +3,14 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 class Partner(models.Model):
+    KOREAN = 'kr'
+    CHINESE = 'ch'
+    JAPANESE = 'jp'
+    CATEGORY_CHOICES = (
+        (KOREAN, '한식'),
+        (CHINESE, '중식'),
+        (JAPANESE, '일식'),
+    )
     user = models.OneToOneField(User, on_delete=models.CASCADE )
     name = models.CharField(
         max_length=50,
@@ -19,6 +27,13 @@ class Partner(models.Model):
     description = models.TextField(
         verbose_name="상세 소개",
     )
+    category = models.CharField(
+    max_length = 2,
+    choices = CATEGORY_CHOICES,
+    default = KOREAN,
+    )
+
+
 
 class Menu(models.Model):
     partner =  models.ForeignKey(

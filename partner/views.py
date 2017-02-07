@@ -67,53 +67,43 @@ def signup(request):
     ctx = {}
     return render(request, "signup.html", ctx)
 
-# def edit_info(request):
-#     ctx = {}
-#     if request.method == "GET":
-#         # Partnerform 객체 생성
-#         partner_form = PartnerForm(instance=request.user.partner)
-#         # 태워보냄
-#         ctx.update({"partner_form":partner_form})
-#     elif request.method == "POST":
-#         partner_form = PartnerForm(
-#             request.POST,
-#             instance=request.user.partner
-#             )
-#         if partner_form.is_valid():
-#             partner = partner_form.save(commit = False)
-#             partner.user = request.user
-#             partner.save()
-#             return redirect("/partner/")
-#         else:
-#             ctx.update({"partner_form":partner_form})
-#
-#     return render(request, "edit_info.html", ctx)
-
 def edit_info(request):
     ctx = {}
     if request.method == "GET":
         # Partnerform 객체 생성
-        partner = request.user.partner
+        partner_form = PartnerForm(instance=request.user.partner)
         # 태워보냄
-        ctx.update({"partner":partner})
+        ctx.update({"partner_form":partner_form})
     elif request.method == "POST":
-        partner = request.user.partner
-        partner.name = request.POST.get('name')
-        partner.contact = request.POST.get('contact')
-        partner.address = request.POST.get('address')
-        partner.save()
-        # name = request.POST.get('name')
-        # contact = request.POST.get('contact')
-        # address = request.POST.get('address')
-        # print(name, contact, address)
-        # if partner_form.is_valid():
-        #     partner = partner_form.save(commit = False)
-        #     partner.user = request.user
-        #     partner.save()
-        return redirect("/partner/")
-        # else:
-        #     ctx.update({"partner":partner})
+        partner_form = PartnerForm(
+            request.POST,
+            instance=request.user.partner
+            )
+        if partner_form.is_valid():
+            partner = partner_form.save(commit = False)
+            partner.user = request.user
+            partner.save()
+            return redirect("/partner/")
+        else:
+            ctx.update({"partner_form":partner_form})
+
     return render(request, "edit_info.html", ctx)
+
+# def edit_info(request):
+#     ctx = {}
+#     if request.method == "GET":
+#         # Partnerform 객체 생성
+#         partner = request.user.partner
+#         # 태워보냄
+#         ctx.update({"partner":partner})
+#     elif request.method == "POST":
+#         partner = request.user.partner
+#         partner.name = request.POST.get('name')
+#         partner.contact = request.POST.get('contact')
+#         partner.address = request.POST.get('address')
+#         partner.save()
+#         return redirect("/partner/")
+#     return render(request, "edit_info.html", ctx)
 
 def menu(request):
     ctx = {}

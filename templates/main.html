@@ -4,24 +4,20 @@
 <div class="container">
   <div class="col-sm-6 col-sm-offset-3">
     <div class="row">
+        <ul class="nav nav-tabs nav-justified">
+          <li><a href="/">all</a></li>
+          <li><a href="/?category=kr">한식</a></li>
+          <li><a href="/?category=ch">중식</a></li>
+          <li><a href="/?category=jp">일식</a></li>
+        </ul>
       {% for partner in partner_list %}
-      <div class="col-sm-4">
-        <div>{{partner.name}}</div>
-        <div>{{partner.address}}</div>
-      </div>
+        {% if partner.user.is_active %}
+        <div class="col-sm-4">
+          <div>{{partner.name}}</div>
+          <div>{{partner.address}}</div>
+        </div>
+        {% endif %}
       {% endfor %}
-      <div class="col-sm-4">
-        <h4>호식이</h4>
-        <div>서울 은평구</div>
-      </div>
-      <div class="col-sm-4">
-        <h4>호식이</h4>
-        <div>서울 은평구</div>
-      </div>
-      <div class="col-sm-4">
-        <h4>호식이</h4>
-        <div>서울 은평구</div>
-      </div>
     </div>
   </div>
 </div>

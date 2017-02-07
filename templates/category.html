@@ -1,0 +1,11 @@
+<div class="container">
+  <div class="col-sm-6 col-sm-offset-3">
+    <li><a href="/partner/">Home</a></li>
+    <li><a href="/partner/menu">Menu</a></li>
+    <li><a href="#">Order</a></li>
+    <li><div style="width:30px;"></div></li>
+    {% if user.is_authenticated %}
+    <li><a href="./login">로그인</a></li>
+    <li><a href="./signup">회원가입</a></li>
+  </div>
+</div>

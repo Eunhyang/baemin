@@ -32,7 +32,8 @@ class Partner(models.Model):
     choices = CATEGORY_CHOICES,
     default = KOREAN,
     )
-
+    def __str__(self):
+        return self.name
 
 
 class Menu(models.Model):
@@ -50,3 +51,5 @@ class Menu(models.Model):
     price = models.PositiveIntegerField(
         verbose_name="가격",
         )
+    def __str__(self):
+        return self.name

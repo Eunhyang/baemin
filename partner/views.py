@@ -4,11 +4,21 @@ from django.contrib.auth import (
     logout as auth_logout
     )
 from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.shortcuts import render, redirect
+
+from client.views import common_login, common_signup
+from client.models import Ordertime
 from .forms import PartnerForm, MenuForm
 from .models import Menu
 
+URL_LOGIN = "/partner/login/"
+
+def patner_group_check(user):
+    return "partner" in [group.name for group in user.groups.all()]
 # Create your views here.
+@user_passes_test(patner_group_check, login_url = URL_LOGIN)
+@login_required(login_url = URL_LOGIN)
 def index(request):
     ctx = {}
     if request.method == "GET":
@@ -29,44 +39,20 @@ def index(request):
     return render(request, "index.html", ctx)
 
 def login(request):
-    ctx = {}
+    ctx = { "is_client" : False }
+    return common_login(request, ctx, "partner")
 
-    if request.method == "GET":
-        pass
-    elif request.method == "POST":
-        username = request.POST.get("username")
-        password = request.POST.get("password")
-        user = authenticate(username=username, password=password)
-
-        if user is not None:
-            print('----------------로그인 성공----------------')
-            auth_login(request, user)
-            return redirect("/partner/")
-        else:
-            print('----------------사용자 없음----------------')
-            ctx.update({"error" : "사용자가 없습니다."})
-
-    return render(request, "login.html", ctx)
 
 def logout(request):
     auth_logout(request)
-    return redirect("/partner/")
+    return redirect("/")
 
 def signup(request):
-    if request.method == "GET":
-        pass
-    elif request.method == "POST":
-        username = request.POST.get("username")
-        email = request.POST.get("email")
-        password = request.POST.get("password")
-        # print(username, email, password)
-
-        user = User.objects.create_user(username, email, password)
-        # Article.objects.create(title="", content="")
-
     ctx = {}
-    return render(request, "signup.html", ctx)
+    return common_signup(request, ctx, "partner")
 
+@user_passes_test(patner_group_check, login_url = URL_LOGIN)
+@login_required(login_url = URL_LOGIN)
 def edit_info(request):
     ctx = {}
     if request.method == "GET":
@@ -104,7 +90,8 @@ def edit_info(request):
 #         partner.save()
 #         return redirect("/partner/")
 #     return render(request, "edit_info.html", ctx)
-
+@user_passes_test(patner_group_check, login_url = URL_LOGIN)
+@login_required(login_url = URL_LOGIN)
 def menu(request):
     ctx = {}
     menu_list = Menu.objects.filter(partner=request.user.partner)
@@ -112,6 +99,8 @@ def menu(request):
     ctx.update({"menu_list":menu_list})
     return render(request, "menu_list.html", ctx)
 
+@user_passes_test(patner_group_check, login_url = URL_LOGIN)
+@login_required(login_url = URL_LOGIN)
 def menu_add(request):
     ctx = {}
     if request.method == "GET":
@@ -135,6 +124,8 @@ def menu_add(request):
 
     return render(request, "menu_add.html", ctx)
 
+@user_passes_test(patner_group_check, login_url = URL_LOGIN)
+@login_required(login_url = URL_LOGIN)
 def menu_detail(requst,menu_id):
     ctx = {}
     menu = Menu.objects.get(id = menu_id)
@@ -142,6 +133,8 @@ def menu_detail(requst,menu_id):
     ctx.update({"menu":menu})
     return render(requst, "menu_detail.html", ctx)
 
+@user_passes_test(patner_group_check, login_url = URL_LOGIN)
+@login_required(login_url = URL_LOGIN)
 def menu_edit(request, menu_id):
     ctx = {}
     menu = Menu.objects.get(id = menu_id)
@@ -162,7 +155,28 @@ def menu_edit(request, menu_id):
 
     return render(request, "menu_add.html", ctx)
 
+@user_passes_test(patner_group_check, login_url = URL_LOGIN)
+@login_required(login_url = URL_LOGIN)
 def menu_delete(request, menu_id):
     menu = Menu.objects.get(id = menu_id)
     menu.delete()
     return redirect("/partner/menu/")
+
+@user_passes_test(patner_group_check, login_url = URL_LOGIN)
+@login_required(login_url = URL_LOGIN)
+def order(request):
+    ctx = {}
+    item_list = []
+    partner = request.user.partner
+    menu_list = Menu.objects.filter(partner=partner)
+    for menu in menu_list:
+        item_list.extend([
+        item for item in Ordertime.objects.filter(menu=menu)
+        ])
+    #왜 집합으로 두는가? 집합:중복허용x순서없음
+    order_set = set([item.order for item in item_list])
+    ctx.update({
+    "order_set" : order_set,
+    "item_list" : item_list,
+    })
+    return render(request, "order_list_for_partner.html", ctx)

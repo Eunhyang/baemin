@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block body %}
+  {% include "navbar.html" %}
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-6 col-sm-offset-3">
+          <h3 class="table_title">주문정보입니다.</h3>
+          <table class="table">
+            <tr>
+              <th>주문자</th>
+              <th>주소</th>
+              <th>메뉴</th>
+              <th>수량</th>
+              <th>주문시간</th>
+            </tr>
+            {% for order in order_set %}
+              {% for item in item_list %}
+                {% if item.order.client.username == order.client.username %}
+                  <tr>
+                    <td>{{order.client.username}}</td>
+                    <td>{{order.address}}</td>
+                    <td>{{item.menu.name}}</td>
+                    <td>{{item.count}}</td>
+                    <td>{{order.created_at}}</td>
+                  </tr>
+                {% endif %}
+              {% endfor %}
+            {% endfor %}
+          </table>
+      </div>
+    </div>
+  </div>
+{% endblock %}

@@ -15,6 +15,9 @@
       <button class="btn btn-lg btn-primary btn-block" type="submit">
         Login
       </button>
+      {% if is_client %}
+        <div class="text-center"><a href="/partner/login">파트너 로그인</a></div>
+      {% endif %}
         {{error}}
   </form>
 </div>
